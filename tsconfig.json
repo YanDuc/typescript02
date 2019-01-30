@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./result",
+        "allowJs": true,
+        "target": "ES5",
+        "pretty":true,
+        "module":"amd",
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+      "Moto.ts",
+      "Camion.ts",
+      "Voiture.ts",
+      "Vehicule.ts",
+      "app.ts"
+    ]
+}
