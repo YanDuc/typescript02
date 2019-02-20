@@ -8,10 +8,8 @@
         "allowSyntheticDefaultImports": true
     },
     "include": [
-      "Moto.ts",
-      "Camion.ts",
-      "Voiture.ts",
-      "Vehicule.ts",
+      "Charge.ts",
+      "Villes.ts",
       "app.ts"
     ]
 }

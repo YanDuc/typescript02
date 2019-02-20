@@ -1,63 +1,73 @@
-import {Vehicule} from "./Vehicule";
-import {Voiture} from "./Voiture";
-import {Moto} from "./Moto";
-import {Camion} from "./Camion";
+import {Villes} from "./Villes";
+import {Charge} from "./Charge";
 import * as $ from "jquery";
 
-let participants = [{'prenom':'bob','vehicule':'camion','consommation':30,'vitesse_max':120,'niveauCarburant':1000},
-                    {'prenom':'martine','vehicule':'moto','consommation':10,'vitesse_max':250,'niveauCarburant':15},
-                    {'prenom':'jean-rené','vehicule':'voiture','consommation':8,'vitesse_max':150,'niveauCarburant':5}];
-let objet = [];
-let i = 0;
-for(let player of participants){
-  if(player.vehicule == 'voiture'){
-    objet[i] = new Voiture(player.niveauCarburant,player.consommation,player.vitesse_max,player.prenom)
-  }
-  if(player.vehicule == 'camion'){
-    objet[i] = new Camion(player.niveauCarburant,player.consommation,player.vitesse_max,player.prenom)
-  }
-  if(player.vehicule == 'moto'){
-    objet[i] = new Moto(player.niveauCarburant,player.consommation,player.vitesse_max,player.prenom)
-  }
-  i++;
-}
 
-$('.run').click(function(){
-  Vehicule.nombreDeJoueurs = participants.length;
-  objet[0].rouler();
-  objet[1].rouler();
-  objet[2].rouler();
-})
-
-setInterval(verifCarbu, 200);
-
-function verifCarbu(){
-  if(objet[0].carbu == false){
-    $("."+objet[0]._type+'pompe').show();
-  } else {
-    $(".fa-gas-pump").hide();
+  let villes = new Charge();
+  let liste = villes.listeVilles;
+  let option ='';
+  option += `<option value="">Veuillez sélectionner une ville</option>`;
+  for(let ville of liste){
+    option += `<option value="${ville.id}">${ville.name}</option>`;
   }
-  if(objet[1].carbu == false){
-    $("."+objet[1]._type+'pompe').show();
-  } else {
-    $(".fa-gas-pump").hide();
-  }
-  if(objet[2].carbu == false){
-    $("."+objet[2]._type+'pompe').show();
-  } else {
-    $(".fa-gas-pump").hide();
+  $('select').append(option);
+  $('.check').html('<i class="fas fa-check" style="color:green;"></i>')
+
+
+
+$('document').ready(function() {
+  let selected1:any = '';
+  let selected2:any = '';
+  let selected3:any = '';
+  $('#select1').change(function() {
+    selected1 = $("#select1").find(':selected').val();
+    gettingJSON("infoselect1",selected1);
+    verifCharge(selected1);
+  });
+  $('#select2').change(function() {
+    selected2 = $("#select2").find(':selected').val();  
+    gettingJSON("infoselect2",selected2);
+    verifCharge(selected2);
+  });
+  $('#select3').change(function() {
+    selected3 = $("#select3").find(':selected').val();
+    gettingJSON("infoselect3",selected3);
+    verifCharge(selected3);
+  });
+  if(selected1 == '' && selected2 == '' && selected3 == ''){
+    $('.check').html('<i class="fas fa-times" style="color:red;"></i>')
   }
 
-  let distance0 = objet[0]._distanceParcourue;
-  let distance1 = objet[1]._distanceParcourue;
-  let distance2 = objet[2]._distanceParcourue;
-  $("."+objet[0]._type).css({
-    "margin-left":distance0/100*10+"px"
-  })
-  $("."+objet[1]._type).css({
-    "margin-left":distance1/100*10+"px"
-  })
-  $("."+objet[2]._type).css({
-    "margin-left":distance2/100*10+"px"
-  })
-}
+  function verifCharge(value){
+    if(value != ''){
+      $('.check').html('<i class="fas fa-check" style="color:green;"></i>')
+    } else {
+      if(selected1 == '' && selected2 == '' && selected3 ==''){
+        $('.check').html('<i class="fas fa-times" style="color:red;">')
+      }
+    }
+  }
+
+  function gettingJSON(select, id){
+    if(id == ''){
+      $('.'+select).hide();
+    } else {
+      $('.'+select).show();
+      console.log(id);
+      $.getJSON("http://api.openweathermap.org/data/2.5/weather?id="+id+"&APPID=1533c46998f95da57f222e373403b36d&units=metric&lang=fr",function(json){   
+        let image = `<img src='http://openweathermap.org/img/w/${json.weather[0].icon}.png' alt='icone-sky'>`
+        let timeStampAPI = new Date(json.dt);
+        let dateWeather = timeStampAPI.toLocaleDateString();   
+        let speedWind: number =  json.wind.speed;
+        let speedWindKMF = speedWind*3.6;
+        $('.'+select+' .villeName').html(json.name);
+        $('.'+select+' .lon').html(json.coord.lon);
+        $('.'+select+' .lat').html(json.coord.lat);
+        $('.'+select+' .dernierRel').html(dateWeather);
+        $('.'+select+' .sky').html(image);
+        $('.'+select+' .temp').html(json.main.temp+"°C");
+        $('.'+select+' .wind').html(speedWindKMF+" km/h");
+      });
+    }
+  }
+});

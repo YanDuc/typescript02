@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 	<meta charset="utf-8">
-	<title>Course de véhicules</title>
+	<title>Test météo</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,22 +11,67 @@
 </head>
 
 <body>
+	<header>
+		<h1>Evaluation JS: Open weather map</h1>
+	</header>
 	<main>
-    <div class="monBouton">
-			<div style="background-color:gray;">
-				<i class="fas fa-truck fa-7x camion"></i>
-				<i class='fas fa-gas-pump fa-7x camionpompe'></i>
+		<h2>Tableau de bord météorologique</h2>
+		<button class="searchList">Récupérer la liste des ville</button>
+		<div>Chargement de la liste des villes à surveiller <span class="check"><i class="fas fa-times"></i></span></div>
+		<div class="container_tab">
+			<div class="section_tab">
+				<select id="select1">
+					
+				</select>
+				<div class="infoselect1">
+					<div class="infoVille">
+						<span class="villeName"></span> (<span class="lon"></span>/<span class="lat"></span>)
+					</div>
+					<div>
+						dernier relevé : <span class="dernierRel"></span>
+					</div>
+					<div class="weather">
+						<div class="sky"></div><div class="temp"></div><div class="wind"></div>
+					</div>
+				</div>
 			</div>
-			<div>
-				<i class="fas fa-car fa-7x voiture"></i>
-				<i class='fas fa-gas-pump fa-7x voiturepompe'></i>
+			<div class="section_tab">
+				<select id="select2">
+					
+				</select>
+				<div class="infoselect2">
+					<div class="infoVille">
+						<span class="villeName"></span> (<span class="lat"></span>°N,<span class="lon"></span>°O)
+					</div>
+					<div>
+						dernier relevé : <span class="dernierRel"></span>
+					</div>
+					<div class="weather">
+						<div class="sky"></div><div class="temp"></div><div class="wind"></div>
+					</div>
+				</div>
 			</div>
-			<div style="background-color:lightgray;">
-				<i class="fas fa-motorcycle fa-7x moto"></i>
-				<i class='fas fa-gas-pump fa-7x motopompe'></i>
+			<div class="section_tab">
+				<select  id="select3">
+					
+				</select>
+				<div class="infoselect3">
+					<div class="infoVille">
+						<span class="villeName"></span> (<span class="lon"></span>/<span class="lat"></span>)
+					</div>
+					<div>
+						dernier relevé : <span class="dernierRel"></span>
+					</div>
+					<div class="weather">
+						<div class="sky"></div><div class="temp"></div><div class="wind"></div>	
+					</div>
+				</div>
 			</div>
-			<button class="run">Run</button>
-    </div>
+
+		</div>  
 	</main>
+	<footer>
+
+	</footer>
 </body>
 </html>

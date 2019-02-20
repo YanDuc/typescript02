@@ -1,61 +1,70 @@
-define(["require", "exports", "./Vehicule", "./Voiture", "./Moto", "./Camion", "jquery"], function (require, exports, Vehicule_1, Voiture_1, Moto_1, Camion_1, $) {
+define(["require", "exports", "./Charge", "jquery"], function (require, exports, Charge_1, $) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var participants = [{ 'prenom': 'bob', 'vehicule': 'camion', 'consommation': 30, 'vitesse_max': 120, 'niveauCarburant': 1000 },
-        { 'prenom': 'martine', 'vehicule': 'moto', 'consommation': 10, 'vitesse_max': 250, 'niveauCarburant': 15 },
-        { 'prenom': 'jean-rené', 'vehicule': 'voiture', 'consommation': 8, 'vitesse_max': 150, 'niveauCarburant': 5 }];
-    var objet = [];
-    var i = 0;
-    for (var _i = 0, participants_1 = participants; _i < participants_1.length; _i++) {
-        var player = participants_1[_i];
-        if (player.vehicule == 'voiture') {
-            objet[i] = new Voiture_1.Voiture(player.niveauCarburant, player.consommation, player.vitesse_max, player.prenom);
-        }
-        if (player.vehicule == 'camion') {
-            objet[i] = new Camion_1.Camion(player.niveauCarburant, player.consommation, player.vitesse_max, player.prenom);
-        }
-        if (player.vehicule == 'moto') {
-            objet[i] = new Moto_1.Moto(player.niveauCarburant, player.consommation, player.vitesse_max, player.prenom);
-        }
-        i++;
+    var villes = new Charge_1.Charge();
+    var liste = villes.listeVilles;
+    var option = '';
+    option += "<option value=\"\">Veuillez s\u00E9lectionner une ville</option>";
+    for (var _i = 0, liste_1 = liste; _i < liste_1.length; _i++) {
+        var ville = liste_1[_i];
+        option += "<option value=\"" + ville.id + "\">" + ville.name + "</option>";
     }
-    $('.run').click(function () {
-        Vehicule_1.Vehicule.nombreDeJoueurs = participants.length;
-        objet[0].rouler();
-        objet[1].rouler();
-        objet[2].rouler();
+    $('select').append(option);
+    $('.check').html('<i class="fas fa-check" style="color:green;"></i>');
+    $('document').ready(function () {
+        var selected1 = '';
+        var selected2 = '';
+        var selected3 = '';
+        $('#select1').change(function () {
+            selected1 = $("#select1").find(':selected').val();
+            gettingJSON("infoselect1", selected1);
+            verifCharge(selected1);
+        });
+        $('#select2').change(function () {
+            selected2 = $("#select2").find(':selected').val();
+            gettingJSON("infoselect2", selected2);
+            verifCharge(selected2);
+        });
+        $('#select3').change(function () {
+            selected3 = $("#select3").find(':selected').val();
+            gettingJSON("infoselect3", selected3);
+            verifCharge(selected3);
+        });
+        if (selected1 == '' && selected2 == '' && selected3 == '') {
+            $('.check').html('<i class="fas fa-times" style="color:red;"></i>');
+        }
+        function verifCharge(value) {
+            if (value != '') {
+                $('.check').html('<i class="fas fa-check" style="color:green;"></i>');
+            }
+            else {
+                if (selected1 == '' && selected2 == '' && selected3 == '') {
+                    $('.check').html('<i class="fas fa-times" style="color:red;">');
+                }
+            }
+        }
+        function gettingJSON(select, id) {
+            if (id == '') {
+                $('.' + select).hide();
+            }
+            else {
+                $('.' + select).show();
+                console.log(id);
+                $.getJSON("http://api.openweathermap.org/data/2.5/weather?id=" + id + "&APPID=1533c46998f95da57f222e373403b36d&units=metric&lang=fr", function (json) {
+                    var image = "<img src='http://openweathermap.org/img/w/" + json.weather[0].icon + ".png' alt='icone-sky'>";
+                    var timeStampAPI = new Date(json.dt);
+                    var dateWeather = timeStampAPI.toLocaleDateString();
+                    var speedWind = json.wind.speed;
+                    var speedWindKMF = speedWind * 3.6;
+                    $('.' + select + ' .villeName').html(json.name);
+                    $('.' + select + ' .lon').html(json.coord.lon);
+                    $('.' + select + ' .lat').html(json.coord.lat);
+                    $('.' + select + ' .dernierRel').html(dateWeather);
+                    $('.' + select + ' .sky').html(image);
+                    $('.' + select + ' .temp').html(json.main.temp + "°C");
+                    $('.' + select + ' .wind').html(speedWindKMF + " km/h");
+                });
+            }
+        }
     });
-    setInterval(verifCarbu, 200);
-    function verifCarbu() {
-        if (objet[0].carbu == false) {
-            $("." + objet[0]._type + 'pompe').show();
-        }
-        else {
-            $(".fa-gas-pump").hide();
-        }
-        if (objet[1].carbu == false) {
-            $("." + objet[1]._type + 'pompe').show();
-        }
-        else {
-            $(".fa-gas-pump").hide();
-        }
-        if (objet[2].carbu == false) {
-            $("." + objet[2]._type + 'pompe').show();
-        }
-        else {
-            $(".fa-gas-pump").hide();
-        }
-        var distance0 = objet[0]._distanceParcourue;
-        var distance1 = objet[1]._distanceParcourue;
-        var distance2 = objet[2]._distanceParcourue;
-        $("." + objet[0]._type).css({
-            "margin-left": distance0 / 100 * 10 + "px"
-        });
-        $("." + objet[1]._type).css({
-            "margin-left": distance1 / 100 * 10 + "px"
-        });
-        $("." + objet[2]._type).css({
-            "margin-left": distance2 / 100 * 10 + "px"
-        });
-    }
 });

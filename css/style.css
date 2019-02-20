@@ -1,3 +1,36 @@
-.camionpompe, .voiturepompe, .motopompe{
+@charset "utf-8";
+header{
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+.container_tab{
+  display:flex;
+  height:200px;
+}
+.section_tab{
+  border:1px solid black;
+  width:33%;
+  height:100%;
+  padding:20px;
+}
+.infoselect1, .infoselect2, .infoselect3{
   display:none;
+}
+.weather{
+  width:80%;
+  display:flex;
+  justify-content: space-between;
+  margin: auto;
+}
+.infoVille{
+  font-weight: bold;
+  font-size: 20px;
+  padding:10px 0;
+}
+.temp{
+  font-size: 30px;
+  font-weight:bolder;
+}
+.check{
+  color:red;
 }
